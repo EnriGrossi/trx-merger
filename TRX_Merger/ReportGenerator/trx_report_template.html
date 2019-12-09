@@ -48,20 +48,20 @@
         }
     </style>
     @{
-      var resultBasedColor = "";
-      var resultBasedPanel= "";
-      var resultBasedDisplay= "";
+    var resultBasedColor = "";
+    var resultBasedPanel= "";
+    var resultBasedDisplay= "";
 
-      if(@Model.Run.ResultSummary.Outcome.Equals("Completed", StringComparison.CurrentCultureIgnoreCase)){
-        resultBasedColor = "#73a839";
-        resultBasedPanel = "panel panel-success";
-        resultBasedDisplay = "none";
-      }
-      else{
-        resultBasedColor = "red";
-        resultBasedPanel = "panel panel-danger";
-        resultBasedDisplay = "block";
-      }
+    if((@Model.Run.ResultSummary.Outcome.Equals("Completed", StringComparison.CurrentCultureIgnoreCase)) || (@Model.Run.ResultSummary.Outcome.Equals("Passed", StringComparison.CurrentCultureIgnoreCase))){
+    resultBasedColor = "#73a839";
+    resultBasedPanel = "panel panel-success";
+    resultBasedDisplay = "none";
+    }
+    else{
+    resultBasedColor = "red";
+    resultBasedPanel = "panel panel-danger";
+    resultBasedDisplay = "block";
+    }
     }
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
@@ -263,7 +263,7 @@
                         <tbody>
                             @foreach (var test in testClassEntry.Value.Tests)
                             {
-                            string rowClass = test.Result.Outcome == "Passed" ? "success" : "danger";
+                            string rowClass = (test.Result.Outcome == "Passed" || test.Result.Outcome == "Completed") ? "success" : "danger";
 
                             <tr class="@rowClass">
                                 <td id="@test.TestId" style="display:none">@test.AsJson()</td>
@@ -411,7 +411,7 @@
         {
             //
             var obj = JSON.parse(detailsCell.innerHTML);
-            if(obj.Result.Outcome == "Passed"){
+            if(obj.Result.Outcome == "Passed" || obj.Result.Outcome == "Completed"){
                 document.getElementById("detailsContent").className = "modal-content panel-success";
                 document.getElementById("detailsSeparator").style.background = "green"
             } else {
