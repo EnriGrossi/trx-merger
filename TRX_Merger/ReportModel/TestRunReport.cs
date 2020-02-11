@@ -84,6 +84,13 @@ namespace TRX_Merger.ReportModel
             
             var results = Run.Results.Where(r => tests.Contains(r.TestName)).ToList();
            
+            //Sometimes instead of testname the testmethod name is namespace::class::testname
+            if (results.Count == 0)
+            {
+                string formattedClassName = className.Replace(".", "::");
+                results = Run.Results.Where(r => tests.Contains(String.Format("{0}::{1}", formattedClassName, r.TestName))).ToList();
+            }
+
             List<UnitTestResultReport> resultReports = new List<UnitTestResultReport>();
             foreach (var r in results)
             {
